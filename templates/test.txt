@@ -1,1 +1,3 @@
+Hi, my name is {{firstname--myFirstName}} {{surname:german}}. 
 
+My cousin is {{firstname:slavik--cousinFirstName}} {{surname:latin}}. 
