@@ -65,7 +65,7 @@ print(output)
 
 ---
 ## FictionaryLayer
-Create Layers with custom fictions / vocabulary and use it on top of the standard set or as standalone.
+Create Layers with custom fictions / vocabulary and use it on top of the standard set.
 
 Lets prepare some data we want to use in our new layer:
 ```
