@@ -111,7 +111,7 @@ print(output)
 
 ## FictionaryTemplate
 
-Use a template which will be filled with fictionary data.
+Use a template which will be filled with fictionary data. Use any text based file format from html, txt and many more.
 
 You can add a json key name with ``--keyname`` where the fictional data will be stored.
 
