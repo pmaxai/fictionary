@@ -1,10 +1,11 @@
 # Fictionary
+
 Create fictionary datasets and documents from templates, jsons or text. 
 
 ---
 ## How to get started
 
-Let start with an easy example by manually choosing our fictive elements.
+#### Let start with an easy example by manually choosing our fictive elements.
 
 ```
 from fictionary import Fictionary
@@ -17,26 +18,66 @@ my_city = fn.choose("city")
 print(f"Hi, my name is {my_first_name} and I am from {my_city}.")
 ```
 
-This is how our first result could look like: 
-``Hi, my name is Anna and I am from New York.``
+> ``Hi, my name is Anna and I am from New York.``
+<br>
+<br>
 
 
-You can also get more specific fictions by passing a origin:
+
+#### You can also get more specific fictions by passing a origin:
 ```
 my_first_name = fn.choose("firstname", "slavik")
 my_city = fn.choose("city", "germany")
 ```
-Now the result will more like this:
-``Hi, my name is Swetlana and I am from Wolfratshausen.``
-
+> ``Hi, my name is Swetlana and I am from Wolfratshausen.``
 
 
 
 ---
+
+## FictionaryLayer
+
+Create Layers with custom fictions / vocabulary and use it on top of the standard set.
+
+#### Lets prepare some data we want to use in our new layer:
+```
+company_names = {
+                 "IT": ["FastIT LLC", "wemakeIT Corp"],
+                 "FinTech": ["QuickPay", "goNFC"]
+                 }
+```
+
+#### Now let's create a new layer, add the company_names into the the layer and fuse it together with the standard fictionary
+```
+from fictionary import Fictionary, FictionaryLayer
+
+layer = FictionaryLayer()
+layer.add("company", company_names)
+
+fn = Fictionary()
+fn.fuse(layer)
+```
+
+
+#### You can now use the fictions from the layer within your fictionary.
+```
+output = fn.choose("company", "IT")
+print(output)
+```
+> ``FastIT LLC``
+
+<br>
+
+
+
+---
+
 ## FictionaryJson
+
 Use a json structure which will be filled with fictionary data. 
 
 ##### Syntax
+
 ```
 from fictionary import Fictionary, FictionaryJson
 
@@ -55,6 +96,7 @@ print(output)
 ```
 
 ##### Output
+
 ```
 {
  'my_first_name': 'Swetlana', 
@@ -63,44 +105,12 @@ print(output)
 ```
 
 
----
-## FictionaryLayer
-Create Layers with custom fictions / vocabulary and use it on top of the standard set.
-
-Lets prepare some data we want to use in our new layer:
-```
-company_names = {
-                 "IT": ["FastIT LLC", "wemakeIT Corp"],
-                 "FinTech": ["QuickPay", "goNFC"]
-                 }
-```
-
-Now let's create a new layer, add the company_names into the the layer and fuse it together with the standard fictionary
-```
-from fictionary import Fictionary, FictionaryLayer
-
-layer = FictionaryLayer()
-layer.add("company", company_names)
-
-fn = Fictionary()
-fn.fuse(layer)
-```
-
-
-You can now use the fictions from the layer within your fictionary.
-```
-output = fn.choose("company", "IT")
-print(output)
-```
-Output: ``FastIT LLC``
-
-
-
-
 
 
 ---
+
 ## FictionaryTemplate
+
 Use a template which will be filled with fictionary data.
 
 You can add a json key name with ``--keyname`` where the fictional data will be stored.
