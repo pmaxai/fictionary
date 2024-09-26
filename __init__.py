@@ -1,7 +1,8 @@
-from .fictionary import Fictionary, Template, JSON
+from .fictionary import Fictionary, FictionaryLayer, FictionaryTemplate, FictionaryJson
 
 __all__ = [
     "Fictionary",
-    "Template",
-    "JSON"
+    "FictionaryLayer",
+    "FictionaryTemplate",
+    "FictionaryJson"
 ]
