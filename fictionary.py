@@ -1,6 +1,4 @@
-import json, os, random, sys
-sys.path.append(".") # Makes sibling directories available
-
+import json, os, random
 
 class FictionaryLayer():
     def __init__(self, path=None):
@@ -28,8 +26,6 @@ class FictionaryLayer():
         if not path.endswith("/"): path += ("/")        
         with open(path, "w") as file:
               file.write(json.dumps(self.layer))
-
-
 
 class Fictionary():
     def __init__(self, standard_origin="global", load_data_on_init=True, path="./fictionary/data"):
@@ -83,8 +79,7 @@ class Fictionary():
         elif type(element) is str:
             template = FictionaryTemplate()
             template.from_text(element)
-            return template.generate(self)
-            
+            return template.generate(self)           
 
 
 
@@ -160,16 +155,7 @@ class FictionaryTemplate():
         return {"json": json,
                 "text": "".join(generation) }
                 
-class FictionaryDetector():
-    def __init__(self, text:str, fictionary:Fictionary, apikey:str ):
-        self.apikey = apikey
-        self.fuctionary = fictionary
-        self.text = text
-    
-    def run(self):
-        # Send fictions + originis with text to Blobber/Antalyse to exchange asked informartion with e.g. {{city:spain--city}}
-        None
-    
+ 
 
 class FictionaryJson():
     def __init__(self, path=None):
@@ -191,26 +177,3 @@ class FictionaryJson():
             generate_json[key] = fictionary.choose(fiction, origin)
         
         return generate_json
-        
-
-
-#fn = Fictionary()
-#fn.extend("city", "spain", ["Bilbao", "Madrid"])
-#fn.add("company_name", {"IT": ["IT Sys", "GetinTouch"]})
-#fn.save("./results/fict")
-
-#print(fn.get_origins("firstname"))
-#print(fn.choose("firstname", "slavik"))
-#temp = FictionaryTemplate(path="./templates/test.txt")
-#temp = FictionaryTemplate()
-#temp.from_text("Hi, my name is {{firstname}} {{surname}}")
-
-#print(temp.template)
-#with open("./results/invoice1.html", "w") as file:
-#      file.write(temp.generate()['text'])
-#print(temp.generate()["text"])
-
-
-#json = FictionaryJson(path="./templates/testj.json")
-#print(json.generate())
-
