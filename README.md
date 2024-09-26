@@ -36,6 +36,7 @@ Now the result will more like this:
 ## FictionaryJson
 Use a json structure which will be filled with fictionary data. 
 
+##### Syntax
 ```
 from fictionary import Fictionary, FictionaryJson
 
@@ -48,15 +49,89 @@ my_element.json = {
                     "location":"city:germany"
                   }
 
-output = fn.generate(my_element)
+output = fn.generate(my_element)  # Can be used in reverse aswell: my_element.generate(fn)
 
 print(output)
 ```
 
-Will result in output:
+##### Output
 ```
 {
  'my_first_name': 'Swetlana', 
  'location': 'Wolfratshausen'
+}
+```
+
+
+---
+## FictionaryLayer
+Create Layers with custom fictions / vocabulary and use it on top of the standard set or as standalone.
+
+Lets prepare some data we want to use in our new layer:
+```
+company_names = {
+                 "IT": ["FastIT LLC", "wemakeIT Corp"],
+                 "FinTech": ["QuickPay", "goNFC"]
+                 }
+```
+
+Now let's create a new layer, add the company_names into the the layer and fuse it together with the standard fictionary
+```
+from fictionary import Fictionary, FictionaryLayer
+
+layer = FictionaryLayer()
+layer.add("company", company_names)
+
+fn = Fictionary()
+fn.fuse(layer)
+```
+
+
+You can now use the fictions from the layer within your fictionary.
+```
+output = fn.choose("company", "IT")
+print(output)
+```
+Output: ``FastIT LLC``
+
+
+
+
+
+
+---
+## FictionaryTemplate
+Use a template which will be filled with fictionary data.
+
+You can add a json key name with ``--keyname`` where the fictional data will be stored.
+
+##### Template "test.txt"
+```
+Hi, my name is {{firstname--myFirstName}} {{lastname:german}}. I live in {{street:spain}}, {{city:spain}}.
+My cousin is {{firstname:slavik--cousinFirstName}} {{lastname:global}}. 
+```
+
+
+##### Syntax
+```
+from fictionary import Fictionary, FictionaryTemplate
+
+fn = Fictionary()
+
+template = FictionaryTemplate()
+
+template.from_file("test.txt") 
+
+output = template.generate(fn) # Can be used in reverse aswell: fn.generate(template)
+
+print(output)
+```
+
+
+##### Output
+```
+{
+ 'json': {'myFirstName': 'Michael', 'cousinFirstName': 'Swetlana'}, 
+ 'text': 'Hi, my name is Michael Schmid. I live in Pla de Revoluzion 15-3-4, Lleida.\nMy cousin is Swetlana Alvarez. '
 }
 ```
