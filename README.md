@@ -31,8 +31,48 @@ my_city = fn.choose("city", "germany")
 ```
 > ``Hi, my name is Swetlana and I am from Wolfratshausen.``
 
+<br>
 
+#### You can add a new fiction by providing it in a json format
 
+##### Define the new fiction
+```
+new_fiction = {
+                 "IT": ["FastIT LLC", "wemakeIT Corp"],
+                 "FinTech": ["QuickPay", "goNFC"]
+              }
+```
+
+##### Add the new fiction to the fictionary
+```
+fn.add("company", new_fiction)
+```
+
+##### Use the new added fictions
+```
+fn.choose("company")
+```
+> wemakeIT Corp
+
+<br>
+
+#### You can also extend an existing fiction
+
+##### Define the data
+```
+new_first_names = ["Mary", "Paul", "Robert"]
+```
+
+##### Extend the fictionary
+```
+fn.extend("firstname", "english", new_first_names)
+```
+
+##### Use the extended fictionary
+```
+fn.choose("firstname", "english")
+```
+> Mary
 ---
 
 ## FictionaryLayer
