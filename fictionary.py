@@ -1,4 +1,5 @@
 import json, os, random
+from .merge import Merge as merge
 
 class FictionaryLayer():
     def __init__(self, path=None):
@@ -13,10 +14,14 @@ class FictionaryLayer():
             self.layer[path.split("/")[-1][:-5]] = json.load(file)
 
     def extend(self, fiction, origin, values):
+        if fiction not in self.layer: 
+            self.layer[fiction] = {}
+        if origin not in self.layer[fiction]:
+            self.layer[fiction][origin] = []            
         self.layer[fiction][origin] += values
     
     def fuse(self, layer):
-        self.layer.update(layer)
+        self.layer = merge.layer(self.layer, layer.layer)
     
     def load(self, path):
         with open(path, "r") as file:
@@ -26,6 +31,8 @@ class FictionaryLayer():
         if not path.endswith("/"): path += ("/")        
         with open(path, "w") as file:
               file.write(json.dumps(self.layer))
+
+
 
 class Fictionary():
     def __init__(self, standard_origin="global", load_data_on_init=True, path="./fictionary/data"):
@@ -39,7 +46,7 @@ class Fictionary():
         self.fictionary[fiction_name] = fiction_json
     
     def fuse(self, layer:FictionaryLayer):
-        self.fictionary.update(layer.layer)
+        self.fictionary = merge.layer(self.fictionary, layer.layer)
             
     def _loadFromRepository(self):               
         filenames = os.listdir(self.folder_path)
@@ -52,7 +59,7 @@ class Fictionary():
             self.fictionary[path.split("/")[-1][:-5]] = json.load(file)
        
     def choose(self, fiction, origin=None):
-        
+        if origin not in self.fictionary[fiction]: origin = "global"
         if not origin: origin = self.standard_origin
         if origin == "global":
             choose_from = []
@@ -63,13 +70,17 @@ class Fictionary():
         return choose_from[random.randint(0, len(choose_from)-1)]
     
     def extend(self, fiction, origin, values):
+        if fiction not in self.fictionary: 
+            self.fictionary[fiction] = {}
+        if origin not in self.fictionary[fiction]:
+            self.fictionary[fiction][origin] = []
         self.fictionary[fiction][origin] += values
-        
-    def get_origins(self, fiction):
-        origins = []
-        for key in self.fictionary[fiction]:
-            origins.append(key)
-        return origins
+    
+    def list_fictions(self):
+        return list(self.fictionary.keys())
+    
+    def list_origins(self, fiction):
+        return list(self.fictionary[fiction].keys())
     
     def generate(self, element):
         if type(element) is FictionaryJson:
@@ -79,9 +90,8 @@ class Fictionary():
         elif type(element) is str:
             template = FictionaryTemplate()
             template.from_text(element)
-            return template.generate(self)           
-
-
+            return template.generate(self)
+            
 
     def save(self, path):
         if not path.endswith("/"): path += ("/") 
@@ -92,88 +102,23 @@ class Fictionary():
 
 
 
-class FictionaryTemplate():
-    def __init__(self, path=None):
-        self.template = []
-        if path: self.from_file(path)
-    
-        
-    def _split(self, text):
-        result = []
-        current_part = ""
-        i = 0
-        while i < len(text):
-          if text[i:i+2] == "{{":
-            if current_part:
-              result.append(current_part)
-            current_part = "{{"
-            i += 2 
-          elif text[i:i+2] == "}}":
-            current_part += "}}"
-            result.append(current_part)
-            current_part = ""
-            i += 2
-          else:
-            current_part += text[i]
-            i += 1
-      
-        if current_part:
-          result.append(current_part)
-        
-        return result
-        
-    def from_file(self, path):
-        with open(path, "r") as file:
-            text = file.read()           
-            self.template = self._split(text)
-    
-    def from_text(self, text):
-        self.template = self._split(text)
-        
-            
-    def generate(self, fictionary):
-        generation = []
+#fn = Fictionary()
+#fn.extend("city", "spain", ["Bilbao", "Madrid"])
+#fn.add("company_name", {"IT": ["IT Sys", "GetinTouch"]})
+#fn.save("./results/fict")
 
-        json = {}
-        for item in self.template:
-            if item.startswith("{{") and item.endswith("}}"):
-                var_split = item[2:-2].split("--")
-                split = var_split[0].split(":")
-                fiction = split[0]
-                origin = None
-                if len(split) == 2: 
-                    origin = split[1]                
-                generated_fiction = fictionary.choose(fiction, origin)
-                if len(var_split) == 2:
-                    json[var_split[1]] = generated_fiction                                
+#print(fn.get_origins("firstname"))
+#print(fn.choose("firstname", "slavik"))
+#temp = FictionaryTemplate(path="./templates/test.txt")
+#temp = FictionaryTemplate()
+#temp.from_text("Hi, my name is {{firstname}} {{surname}}")
 
-                generation.append(generated_fiction)
-                
-            else:
-                generation.append(item)
+#print(temp.template)
+#with open("./results/invoice1.html", "w") as file:
+#      file.write(temp.generate()['text'])
+#print(temp.generate()["text"])
 
-        return {"json": json,
-                "text": "".join(generation) }
-                
- 
 
-class FictionaryJson():
-    def __init__(self, path=None):
-        self.json = {}
-        if path: self._importFromFile(path)
+#json = FictionaryJson(path="./templates/testj.json")
+#print(json.generate())
 
-    def _importFromFile(self, path):
-        with open(path, "r") as file:
-            self.json = json.load(file)
-    
-    def generate(self, fictionary):
-        generate_json = {}
-        for key in self.json:
-            split = self.json[key].split(":")
-            fiction = split[0]
-            origin = None
-            if len(split) == 2: 
-                origin = split[1]    
-            generate_json[key] = fictionary.choose(fiction, origin)
-        
-        return generate_json
