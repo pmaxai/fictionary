@@ -1,0 +1,3 @@
+{"city": "Barcelona", "country": "Spain", "zip":"80010", "state":"Catalunia", "mapping": ["city", "state", "zip"] }
+{"city": "Hirm", "country": "Austria", "zip":"7052", "state":"Burgenland", "mapping": ["city", "state", "zip"]}
+{"city": "Tarifa", "country": "Spain", "zip":"74512", "state":"Andalusia", "mapping": ["city", "state", "zip"] }
