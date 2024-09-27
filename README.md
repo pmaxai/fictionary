@@ -128,6 +128,31 @@ fn = Fictionary(path="path/to/your/folder")
 ```
 fn = Fictionary(load_data_on_init=False)
 ```
+<br>
+
+---
+## FictionaryMap
+Mapping allows you to create consistent realistic data by mapping relevant information towards a given keywoard.
+
+```
+from fictionary import Fictionary, FictionaryMap
+
+fn = Fictionary()
+fmap = FictionaryMap()
+
+name = fn.choose("firstname", "latin")
+city = fn.choose("city")
+state = fmap.do(city, "state")
+country = fmap.do(city, "country")
+
+print(f"Hi, my name is {name} and I live in {city}, thats located in {state}, {country}.")
+```
+> Hi, my name is Pablo and I live in Barcelona, thats located in Catalunia, Spain.
+
+
+
+
+
 
 ---
 
