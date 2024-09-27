@@ -73,6 +73,62 @@ fn.extend("firstname", "english", new_first_names)
 fn.choose("firstname", "english")
 ```
 > Mary
+<br>
+
+#### You can check which fictions or origins are available
+##### List all Fictions
+```
+fn.list_fictions()
+```
+> ['city', 'firstname', 'street', 'lastname']
+
+##### List all origins from a fiction
+```
+fn.list_origins("city")
+```
+> ['germany', 'spain', 'usa']
+
+
+<br>
+
+### Origins
+
+##### You can set a standard origin to use. If the fiction does not contain this origin, it uses ``global`` instead
+
+```
+fn = Fictionary(standard_origin="germany")
+```
+
+##### You can overrule the standard origin by passing the desired origin
+
+```
+fn.choose("city", "spain")
+```
+> Barcelona
+
+<br>
+
+### Save and Load
+
+You can save fictionarys - may needed if you add your custom data - to a folder and load it from there the next time
+
+##### Save the complete fictionary
+
+```
+fn.save("path/to/your/folder")
+```
+
+##### Load a custom fictionary from a path
+
+```
+fn = Fictionary(path="path/to/your/folder")
+```
+
+##### If you want to load a completely clean fictionary without any data, disable ``load_data_on_init``
+```
+fn = Fictionary(load_data_on_init=False)
+```
+
 ---
 
 ## FictionaryLayer
@@ -185,3 +241,12 @@ print(output)
  'text': 'Hi, my name is Michael Schmid. I live in Pla de Revoluzion 15-3-4, Lleida.\nMy cousin is Swetlana Alvarez. '
 }
 ```
+
+<br>
+
+##### You can as well create a template from a normal string. 
+
+```
+template.from_text(my_string)
+```
+
